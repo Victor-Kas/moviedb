@@ -8,7 +8,7 @@ const FavouriteMovies = ({favouriteMovies, favourites, setFavourites}) => {
     <div>
         {
             
-            favouriteMovies?.length > 0 ?
+            favouriteMovies.length > 0 ?
             (
                 <div className='container'>
                 {

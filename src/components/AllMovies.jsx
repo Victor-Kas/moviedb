@@ -7,7 +7,7 @@ const AllMovies = ({movies, favourites, setFavourites}) => {
   return (
     <div>
         {
-            movies?.length > 0 ?
+            movies.length > 0 ?
             (
                 <div className='container'>
                 {

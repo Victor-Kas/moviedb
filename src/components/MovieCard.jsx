@@ -7,7 +7,7 @@ const MovieCard = ({movie,favourites, setFavourites, RemoveFavourite,AddToFavour
         <p>{movie.release_date}</p>
       </div>
       <div>
-        <img src={imageUrl+movie.poster_path ?? 'https://via.placeholder.com/400'}
+        <img src={imageUrl+movie.poster_path}
              alt={movie.title}
         />
       </div>
