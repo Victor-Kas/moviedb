@@ -1,6 +1,6 @@
 import './App.css';
 import {Route, Routes} from "react-router-dom";
-import React, { useState,useEffect } from 'react';
+import { useState,useEffect } from 'react';
 import AllMovies from "./components/AllMovies";
 import { Link } from "react-router-dom";
 import { Button, Grid, TableRow, TableCell } from '@material-ui/core'
