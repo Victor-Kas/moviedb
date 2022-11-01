@@ -1,74 +1,75 @@
 import './App.css';
-import MovieCard from './MovieCard';
+import {Route, Routes} from "react-router-dom";
 import { useState,useEffect } from 'react';
-import SearchIcon from "./search.svg";
+import AllMovies from "./components/AllMovies";
+import { Link } from "react-router-dom";
+import { Button, Grid, TableRow, TableCell } from '@material-ui/core'
+import FavouriteMovies from './components/FavouriteMovies';
 
-//68b71574
 
-const API_URL = 'https://www.omdbapi.com?apikey=68b71574'
+
+const API_URL = 'https://api.themoviedb.org/3/movie/popular?api_key=d0f5f2e135336200362af8a1a73acb17'
 
 function App() {
+    
     const [movies, setMovies] = useState([]);
-    const [searchTerm, setsearchTerm] = useState([]);
-
-    const searchMovies = async (title) => {
-      const response = await fetch(`${API_URL}&s=${title}`);
+    const [favouriteMovies, setFavouriteMovies] = useState([]);
+    const [favourites, setFavourites] = useState([]);
+    const getMovies = async () => {
+      const response = await fetch(`${API_URL}`);
       const data = await response.json();
-      setMovies(data.Search);
+      setMovies(data.results);
     }  
     useEffect(()=>{
-      searchMovies('ragnarok');
+      getMovies();
     },[]);
+    
+    useEffect(() => {
+      if (favourites === []) {
+        return;
+      }
+      const filteredMovies = movies.filter(movie => {
+        if (favourites.includes(movie.id)) {
+          return true;
+        }
+        else 
+        {
+          return false;
+        }
+      });
 
-    const movie1 = {
-      "Title": "Ragnarok",
-        "Year": "2020–",
-          "imdbID": "tt9251798",
-            "Type": "series",
-              "Poster": "https://m.media-amazon.com/images/M/MV5BODM3NTZkZTUtYzEyYS00NjEyLTg2NjEtNDhlMjYwY2ZkNGUzXkEyXkFqcGdeQXVyMTMxODk2OTU@._V1_SX300.jpg"
-    }
+      setFavouriteMovies(filteredMovies);
+
+    }, [favourites,movies])
+
 
     return (
       
-        <div className='main'>
-          <h1>Kas Theatre</h1>
-          <div className='search'>
-            <input 
-              placeholder='search for a film'
-              value={searchTerm}
-              onChange={(e) => {setsearchTerm(e.target.value)}}  
-            />
-            <img 
-              src={SearchIcon} 
-              alt='search'
-              onClick={() => {searchMovies(searchTerm)}}
-            />
-          </div>
-          {
-            movies?.length > 0 ?
-            (
-              <div className='container'>
-                {
-                  movies.map( 
-                    movie => (
-                      <MovieCard movie={movie}/>
-                    )
-                  )
-                }
-                
+      <div className='main'>
+
+        <h1>Kas Theatre</h1>
+          <Grid>
+            <TableRow is="nospace start">
+              <TableCell is="9 tablet-6 phone-3">
+              <div className='filter'>
+                <Link to='/'><Button variant='text'><h3 style={{ fontFamily: "Roboto Slab, serif", color: '#f9d3b4' }}>All Movies</h3></Button></Link>
               </div>
-            ):
-            (
-              <div className='empty'>
-                <h2>Movie Catalogue Empty</h2>
-                  
+              </TableCell>
+              <TableCell is="middle 3 tablet-2 phone-1">
+              <div className='filter'>
+                <Link to="/favourites"><Button variant='text'><h3 style={{ fontFamily: "Roboto Slab, serif", color: '#f9d3b4' }}>Favourite Movies</h3></Button></Link>
               </div>
-            )
-          }
+              </TableCell>
+            </TableRow>
+          </Grid>
+        <Routes>
+          <Route path="/" element={<AllMovies movies={movies} favourites={favourites} setFavourites={setFavourites} />} />
+          <Route path="/favourites" element={<FavouriteMovies favouriteMovies={favouriteMovies} favourites={favourites} setFavourites={setFavourites} />} />
+        </Routes>
           
-        </div>
+      </div>
       
-      );
+    );
   
 }
 
